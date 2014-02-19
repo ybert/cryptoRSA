@@ -11,6 +11,11 @@ public class Main {
                 BigInteger r = Exp(b, c, m);
 		System.out.println(r.toString());
                 */
+            
+                BigInteger m = new BigInteger("10");
+		BigInteger n = new BigInteger("5");
+		
+		System.out.println(pgcd(m,n));
 	}
         
         public static BigInteger Exp(BigInteger b, BigInteger c, BigInteger n) {
@@ -32,14 +37,12 @@ public class Main {
            return false;
         }
 
-	
-	public int pgcd(int m, int n) {
-		   while ( n != 0 ) {
-		     //int r = m mod n;
-			 int r =1;
-		     m = n;
-		     n = r;
-		   }
-		   return m;
-		 }
+	public static BigInteger pgcd(BigInteger m, BigInteger n) {
+		while (! n.equals(new BigInteger("0")) ) {
+			BigInteger r = m.mod(n);
+			m = n;
+			n = r;
+		}
+		return m;
+	}
 }
