@@ -1,5 +1,6 @@
 package tpcrypto2;
 import java.math.BigInteger;
+import java.util.Random;
 
 public class Main {
 
@@ -19,8 +20,8 @@ public class Main {
 	}
         
         public static BigInteger Exp(BigInteger b, BigInteger c, BigInteger n) {
-            BigInteger r = new BigInteger("1");
-            while(!c.equals(new BigInteger("0"))) {
+            BigInteger r = BigInteger.ONE;
+            while(!c.equals(BigInteger.ZERO)) {
                 if(odd(c)) {
                     r = r.multiply(b).mod(n);
                     c = c.shiftRight(1);
@@ -38,11 +39,46 @@ public class Main {
         }
 
 	public static BigInteger pgcd(BigInteger m, BigInteger n) {
-		while (! n.equals(new BigInteger("0")) ) {
+		while (! n.equals(BigInteger.ZERO) ) {
 			BigInteger r = m.mod(n);
 			m = n;
 			n = r;
 		}
 		return m;
 	}
+        
+        public static boolean estProbablementPremier(BigInteger n) {
+            BigInteger m = n;
+            m = m.subtract(BigInteger.ONE);
+            int k = 0;
+            while(m.testBit(0)) {
+                m = m.shiftRight(1);
+                k++;
+            }
+            BigInteger a = randomBigInteger(n);
+            BigInteger b = Exp(a, m, n);
+            if(b.mod(n).equals(BigInteger.ONE)) {
+                return true;
+            }
+            else {
+                for(int i=0;i<k-1;i++) {
+                    if(b.mod(n).equals(new BigInteger("-1"))) {
+                        return true;
+                    }
+                    b = b.multiply(b).mod(n);
+                }
+            }
+            return false;
+        }
+        
+        public static BigInteger randomBigInteger(BigInteger n) {
+            Random rnd = new Random();
+            int maxNumBitLength = n.bitLength();
+            BigInteger aRandomBigInt;
+            do {
+                aRandomBigInt = new BigInteger(maxNumBitLength, rnd);
+                // itère tant que le randomNumber n'est pas entre 1 et n-1
+            } while (aRandomBigInt.compareTo(n) > 0 && aRandomBigInt.compareTo(BigInteger.ZERO) < 0); // Nombre d'itérations max : 2
+            return aRandomBigInt;
+        }
 }
