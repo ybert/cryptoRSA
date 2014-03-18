@@ -1,7 +1,11 @@
 package tpcrypto2;
 import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class CryptoLib {
 
@@ -133,5 +137,30 @@ public class CryptoLib {
         BigInteger retour = (s.get(i-1).compareTo(BigInteger.ZERO) >= 0)?s.get(i-1):s.get(i-1).add(b);
         
         return retour;
+    }
+    
+    /* Sha1 */
+    public static String encodeToSHA1(String message) throws NoSuchAlgorithmException {
+        MessageDigest mDigest = MessageDigest.getInstance("SHA1");
+        byte[] result = mDigest.digest(message.getBytes());
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < result.length; i++) {
+            sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
+        }
+        return sb.toString();
+    }
+    public static Boolean compareSHA1(String word, String sha1){
+        
+        String sha1AComparer="";
+        String sha1WithoutSpace = "";
+        try {
+            sha1AComparer = CryptoLib.encodeToSHA1(word);
+            sha1WithoutSpace = sha1.trim();
+
+        } catch (NoSuchAlgorithmException ex) {
+            Logger.getLogger(CryptoLib.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return sha1AComparer.equals(sha1WithoutSpace);
     }
 }
