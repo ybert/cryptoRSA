@@ -8,27 +8,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CryptoLib {
-
-    public static void main(String[] args) {
-        /*  // Test de Exp
-            BigInteger b = new BigInteger("5");
-            BigInteger c = new BigInteger("3");
-            BigInteger m = new BigInteger("13");
-            BigInteger r = Exp(b, c, m);
-            System.out.println(r.toString());
-            */
-        /* Test pgcd
-            BigInteger m = new BigInteger("10");
-            BigInteger n = new BigInteger("5");
-
-            System.out.println(pgcd(m,n));
-            */
-        /* Test estPremierRapide
-        BigInteger premier = new BigInteger("234846468351588648613");
-        System.out.println(estPremierRapide(premier, 10));
-        */
-    }
-
     public static BigInteger Exp(BigInteger b, BigInteger c, BigInteger n) {
         BigInteger r = BigInteger.ONE;
         while(!c.equals(BigInteger.ZERO)) {
@@ -68,7 +47,7 @@ public class CryptoLib {
             vark = vark.add(BigInteger.ONE);
         }
         
-        BigInteger a = randomBigInteger(n);
+        BigInteger a = randomBigInteger(BigInteger.ONE, n.subtract(BigInteger.ONE));
         BigInteger b = a.modPow(varM, n);
         
         if ((b.mod(n)).compareTo(BigInteger.ZERO) == 0) {
@@ -86,14 +65,15 @@ public class CryptoLib {
         return false;
     }
         
-    public static BigInteger randomBigInteger(BigInteger n) {
-        Random rnd = new Random();
-        int maxNumBitLength = n.bitLength();
+    public static BigInteger randomBigInteger(BigInteger min, BigInteger max) {
+        int maxNumBitLength = max.bitLength();
         BigInteger aRandomBigInt;
-        do {
-            aRandomBigInt = new BigInteger(maxNumBitLength, rnd);
-            // itère tant que le randomNumber n'est pas entre 1 et n-1
-        } while (aRandomBigInt.compareTo(n) > 0 && aRandomBigInt.compareTo(BigInteger.ZERO) < 0); // Nombre d'itérations max : 2
+        
+        Random rnd = new Random();
+        
+        aRandomBigInt = new BigInteger(maxNumBitLength, rnd);
+        aRandomBigInt = aRandomBigInt.mod(max).add(min);
+        
         return aRandomBigInt;
     }
         
